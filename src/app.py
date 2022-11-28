@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 import json
 
 datas_exo = pd.read_json("./data.json")
@@ -22,7 +23,6 @@ def convertDataToJson(data):
     # json_string = json.dumps(result)
     data = cleanJson(data)
     df2 = pd.DataFrame.from_dict(data)
-    print(df2)
     df2.to_json("./data.json", orient='records', indent=4)
 
 
@@ -38,17 +38,10 @@ def cleanJson(data):
             }
             result.append(obj)
     return result
-# print(json_object)
-#cleaned_df = pd.DataFrame(result)
-# cleaned_df.to_json("./data.json")
-##       json_string = json.dumps(obj)
-    # print(json_string)
-
 
 def cleanCsv(data):
     result = []
     for i in range(len(data)):
-        print(data.loc[i])
         if ("distance" in data.loc[i]):
             result.append(data.loc[i])
     cleaned_df = pd.DataFrame(result)
@@ -58,4 +51,11 @@ def cleanCsv(data):
 # print(cleanCsv(dfNasa))
 # convertDataToCSV(dfJson)
 
-convertDataToJson(dfJson)
+#convertDataToJson(dfJson)
+
+clean_json_data = cleanJson(dfJson)
+#radiuses = pd.json_normalize(clean_json_data, record_path=['fields'], meta=['radius'])
+
+radiuses = pd.json_normalize(clean_json_data, ["fields"],meta=["radius"])
+
+#ax1 = clean_json_data.plot(x=clea)
