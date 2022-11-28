@@ -3,20 +3,18 @@ import matplotlib.pyplot as plt
 import json
 
 datas_exo = pd.read_json("./data.json")
-# datas_exo = pd.read_json("../assets/catalogue_exoplanet.json")
-datas_nasa = pd.read_csv("../assets/exo_nasa.csv", sep=';', names=['sy_dist'])
+
+
 dfJson = pd.DataFrame(datas_exo)
-dfNasa = pd.DataFrame(datas_nasa)
+
+dfCsv = pd.read_csv('../assets/catalogue_exoplanet.csv',na_values = 'null', sep = ';')
 
 # print(dfNasa.to_string())
 
 
-def convertDataToCSV(df):
-
-    print(df)
-    result = []
-    for i in range(len(df)):
-        print(df[i]["sy_dist"])
+def getRadiusClean(data):
+    exoplanet = data[data['Radius'].notna()]
+    return exoplanet
 
 
 def convertDataToJson(data):
@@ -48,14 +46,22 @@ def cleanCsv(data):
     cleaned_df.to_csv("./nasa.csv")
 
 
-# print(cleanCsv(dfNasa))
+
 # convertDataToCSV(dfJson)
 
 #convertDataToJson(dfJson)
 
-clean_json_data = cleanJson(dfJson)
+#clean_json_data = cleanJson(dfJson)
+#clean_json_data = pd.DataFrame(clean_json_data)
+#cleanDf = pd.read_csv("../assets/exo_nasa.csv", sep=';', names=['sy_dist']) pd.read_json("./catalogue_exoplnet.xlsx")
 #radiuses = pd.json_normalize(clean_json_data, record_path=['fields'], meta=['radius'])
 
-radiuses = pd.json_normalize(clean_json_data, ["fields"],meta=["radius"])
+#radiuses = pd.json_normalize(clean_json_data, record_path=["fields"],meta=["radius"])
 
-#ax1 = clean_json_data.plot(x=clea)
+#print(clean_json_data)
+
+data = getRadiusClean(dfCsv)
+data.sort_values('Radius', ascending=True, inplace=True)
+ax1 = data.plot.scatter(y="Radius",x="Discovery",yticks = range(0,1000,150))
+
+plt.show()
