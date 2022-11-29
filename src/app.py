@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import json
 
+import plotly.express as px
+
 datas_exo = pd.read_json("./data.json")
 
 
@@ -15,7 +17,9 @@ dfCsv = pd.read_csv('../assets/catalogue_exoplanet.csv',na_values = 'null', sep 
 def getRadiusClean(data):
     exoplanet = data[data['Radius'].notna()]
     return exoplanet
-
+def getMassClean(data):
+    exoplanet = data[data['Mass'].notna()]
+    return exoplanet
 
 def convertDataToJson(data):
     # json_string = json.dumps(result)
@@ -46,22 +50,17 @@ def cleanCsv(data):
     cleaned_df.to_csv("./nasa.csv")
 
 
-
-# convertDataToCSV(dfJson)
-
-#convertDataToJson(dfJson)
-
-#clean_json_data = cleanJson(dfJson)
-#clean_json_data = pd.DataFrame(clean_json_data)
-#cleanDf = pd.read_csv("../assets/exo_nasa.csv", sep=';', names=['sy_dist']) pd.read_json("./catalogue_exoplnet.xlsx")
-#radiuses = pd.json_normalize(clean_json_data, record_path=['fields'], meta=['radius'])
-
-#radiuses = pd.json_normalize(clean_json_data, record_path=["fields"],meta=["radius"])
-
-#print(clean_json_data)
-
 data = getRadiusClean(dfCsv)
-data.sort_values('Radius', ascending=True, inplace=True)
-ax1 = data.plot.scatter(y="Radius",x="Discovery",yticks = range(0,1000,150))
+data = getMassClean(data)
+print(data)
 
+#data.sort_values('Radius', ascending=True, inplace=True)
+
+data.sort_values('Mass', ascending=True, inplace=True)
+
+#ax1 = data.plot.scatter(y="Radius",x="Discovery",yticks = range(0,1000,150))
+
+#ax2 = data.plot.scatter(y="Mass",x="Discovery",yticks = range(0,1000,150))
+
+ax3 = data.plot.scatter(x="Mass", y="Radius",yticks = range(0,1000,150),xticks = range(0,1000,150))
 plt.show()
